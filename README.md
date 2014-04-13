@@ -23,26 +23,12 @@ This script assumes that:
 This script generates the following the following disk layout:
 
 
-  media/
+    media/
 
-    btrfs/ (holds catalogue of snapshots)
-      @home/
-      @arch/
-      @toplevel/
-      home/
-        home.20140415/
-        home.20140416/
-        ...
-      arch/
-        arch.20140415/
-        arch.20140416/
-        ...
-      toplevel/
-        toplevel.20140415/
-        toplevel.20140416/
-        ...
-
-      backup/ (points to backup device.  Backups get stored here.)
+      btrfs/ (holds catalogue of snapshots)
+        @home/
+        @arch/
+        @toplevel/
         home/
           home.20140415/
           home.20140416/
@@ -55,3 +41,17 @@ This script generates the following the following disk layout:
           toplevel.20140415/
           toplevel.20140416/
           ...
+
+        backup/ (points to backup device.  Backups get stored here.)
+          home/
+            home.20140415/
+            home.20140416/
+            ...
+          arch/
+            arch.20140415/
+            arch.20140416/
+            ...
+          toplevel/
+            toplevel.20140415/
+            toplevel.20140416/
+            ...
