@@ -41,22 +41,22 @@ def snapshot_cmd(snapshot_repo_path, vol):
         
 def do_backup():
     """Perform a backup"""
-    
     snapshots = build_snapshots_dict()
-
+    
     for vol in snapshots:
         try:
-            backup_cmd(snapshots_repo_path, snapshots_backup_path, vol)
-        except: 
+            backup_cmd(snapshots_repo_path, snapshots_backup_path, vol, snapshots)
+        except:
             import traceback
             traceback.print_exc()
 
-def backup_cmd(snapshots_repo_path, snapshots_backup_path, vol):
+def backup_cmd(snapshots_repo_path, snapshots_backup_path, vol, snapshots):
     """call btrfs send/receive to back up the last snapshot in the
     snapshots repository, relative to the last snapshot found on the
     backup device (if one is found)"""
 
     new_snapshot_backup_path = os.path.join(snapshots_backup_path, vol)
+    prev_snapshot = os.path.join(snapshots_repo_path, vol, vol+"."+snapshots[vol][-1])
 
     # obtain name of latest snapshot on the backup device
     vol_snapshots_path = os.path.join(snapshots_backup_path, vol)
@@ -68,10 +68,9 @@ def backup_cmd(snapshots_repo_path, snapshots_backup_path, vol):
     if last_backedup_snapshot != []:
         last_backedup_snapshot_path = os.path.join(vol_snapshots_path, last_backedup_snapshot)
         last_snapshot_tuple = ["-p", last_backedup_snapshot_path]        
-        last_snapshot_tupe.append(last_backedup_snapshot_path)
 
     # call btrfs send/receive
-    cmd = sudo[btrfs["send",last_snapshot_tuple]] | sudo[btrfs["receive",new_snapshot_backup_path]]
+    cmd = sudo[btrfs["send",last_snapshot_tuple, prev_snapshot]] | sudo[btrfs["receive",new_snapshot_backup_path]]
     print cmd
 
 def mount_snapshots_repo():
