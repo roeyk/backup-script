@@ -8,7 +8,7 @@ import sys
 import time
 import argparse
 import os,os.path
-from os.path import basename
+from os.path import basename, join
 
 # third-part imports
 from plumbum import local
@@ -31,8 +31,8 @@ def do_snapshot():
 def snapshot_cmd(snapshot_repo_path, vol):
     """call btrfs sub snap to create a new snapshot"""
     
-    new_snapshot_path = os.path.join(snapshots_repo_path, vol, vol + "." + datetime_stamp)
-    subvol_base = os.path.join(snapshots_repo_path, '@'+(vol if vol != 'toplevel' else ''))
+    new_snapshot_path = join(snapshots_repo_path, vol, vol + "." + datetime_stamp)
+    subvol_base = join(snapshots_repo_path, '@'+(vol if vol != 'toplevel' else ''))
     
     # call btrfs to take snapshots
     
@@ -55,35 +55,35 @@ def backup_cmd(snapshots_repo_path, snapshots_backup_path, vol, snapshots):
     snapshots repository, relative to the last snapshot found on the
     backup device (if one is found)"""
 
-    new_snapshot_backup_path = os.path.join(snapshots_backup_path, vol)
-    prev_snapshot = os.path.join(snapshots_repo_path, vol, vol+"."+snapshots[vol][-1])
-
-    # obtain name of latest snapshot on the backup device
-    vol_snapshots_path = os.path.join(snapshots_backup_path, vol)
-    last_backedup_snapshot = sorted(os.listdir(vol_snapshots_path))[-1]  
+    new_snapshot_backup_path = join(snapshots_backup_path, vol)
+    prev_snapshot = join(snapshots_repo_path, vol, vol+"."+snapshots[vol][-1])
     
+    # obtain name of latest snapshot on the backup device
+    last_backedup_snapshot = sorted(os.listdir(join(snapshots_backup_path, vol)))[-1]
     last_snapshot_tuple = []    
 
     # if we found a backed-up snapshot on the backup device, then make this backup relative to it
     if last_backedup_snapshot != []:
-        last_backedup_snapshot_path = os.path.join(vol_snapshots_path, last_backedup_snapshot)
-        last_snapshot_tuple = ["-p", last_backedup_snapshot_path]        
+        last_snapshot_tuple = ["-p", join(snapshots_repo_path, vol, last_backedup_snapshot)]
 
     # call btrfs send/receive
     cmd = sudo[btrfs["send",last_snapshot_tuple, prev_snapshot]] | sudo[btrfs["receive",new_snapshot_backup_path]]
-    print cmd
+    cmd()
+#    print cmd
 
 def mount_snapshots_repo():
     """Mount snapshots repository"""
     
     cmd = sudo[mount["-osubvolid=0","/dev/sda1","/media/btrfs"]]
-    print cmd
+    cmd()
+#    print cmd
     
 def umount_snapshots_repo():
     """Unmount snapshots repository"""
     
     cmd = sudo[umount["/media/btrfs"]]
-    print cmd
+    cmd()
+#    print cmd
     
 def build_snapshots_dict():
     """Build a dictionary of all snapshots, with volume names as keys and lists of snapshot paths as values"""
