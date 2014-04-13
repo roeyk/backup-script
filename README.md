@@ -21,7 +21,10 @@ This script assumes that:
   - backup drive has "toplevel", "home" and "arch" top-level directories
  
 This script generates the following the following disk layout:
+
+
   media/
+
     btrfs/ (holds catalogue of snapshots)
       @home/
       @arch/
