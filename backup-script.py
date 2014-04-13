@@ -29,7 +29,7 @@ def do_snapshot():
         snapshot_cmd(snapshots_repo_path, vol)
 
 def snapshot_cmd(snapshot_repo_path, vol):
-    """call btrfs sub snap to create a new snapshot"
+    """call btrfs sub snap to create a new snapshot"""
     
     new_snapshot_path = os.path.join(snapshots_repo_path, vol, vol + "." + datetime_stamp)
     subvol_base = os.path.join(snapshots_repo_path, '@'+(vol if vol != 'toplevel' else ''))
