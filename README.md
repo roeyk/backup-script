@@ -21,33 +21,34 @@ This script assumes that:
   - backup drive has "toplevel", "home" and "arch" top-level directories
  
 This script generates the following the following disk layout:
-   media/
-      btrfs/ (holds catalogue of snapshots)
-         @home/
-         @arch/
-         @toplevel/
-         home/
-           home.20140415/
-           home.20140416/
-           ...
-         arch/
-           arch.20140415/
-           arch.20140416/
-           ...
-         toplevel/
-           toplevel.20140415/
-           toplevel.20140416/
-           ...
+  media/
+    btrfs/ (holds catalogue of snapshots)
+      @home/
+      @arch/
+      @toplevel/
+      home/
+        home.20140415/
+        home.20140416/
+        ...
+      arch/
+        arch.20140415/
+        arch.20140416/
+        ...
+      toplevel/
+        toplevel.20140415/
+        toplevel.20140416/
+        ...
+
       backup/ (points to backup device.  Backups get stored here.)
-         home/
-           home.20140415/
-           home.20140416/
-           ...
-         arch/
-           arch.20140415/
-           arch.20140416/
-           ...
-         toplevel/
-           toplevel.20140415/
-           toplevel.20140416/
-           ...
+        home/
+          home.20140415/
+          home.20140416/
+          ...
+        arch/
+          arch.20140415/
+          arch.20140416/
+          ...
+        toplevel/
+          toplevel.20140415/
+          toplevel.20140416/
+          ...
